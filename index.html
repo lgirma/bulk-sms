@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
+    <title>Bulk SMS</title>
+    <style>
+        html {
+            font-family: system-ui;
+        }
+        body {
+            display: flex;
+            background: rgb(250, 250, 250);
+            flex-direction: column;
+            gap: 10px;
+            height: calc(100vh - 20px);
+            margin: 0;
+            padding: 10px;
+        }
+        label {
+            display: block;
+        }
+        button {
+            font-size: medium;
+        }
+        textarea {
+            flex: 1;
+        }
+        #link-sms {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <button id="btn-send">Send SMS</button>
+    </div>
+    <textarea placeholder="Phone List..." id="phones"></textarea>
+    <a id="link-sms" href="">SMS</a>
+
+    <script>
+        const txtPhones = document.getElementById('phones');
+        const link = document.getElementById('link-sms');
+        document.getElementById('btn-send').addEventListener('click', e => {
+            let phoneListTxt = txtPhones.value;
+            let list = phoneListTxt.trim()
+                .split(/[,\n]/)
+                .map(p => p.trim())
+                .filter(p => !!p);
+
+            if (list.length === 0)
+                return;
+
+            const os = getMobileOperatingSystem();
+
+            if (os === 'iOS')
+                link.href = `sms://open?addresses=${list.join(',')}`
+            else
+                link.href = `sms://${list.join(',')}`
+            link.click();
+        });
+
+        function getMobileOperatingSystem() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            if (/android/i.test(userAgent)) {
+                return "Android";
+            }
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return "iOS";
+            }
+            return "unknown";
+        }
+    </script>
+</body>
+</html>

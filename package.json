@@ -1,0 +1,13 @@
+{
+  "name": "bulk-sms",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "sirv --host 0.0.0.0 --port 8888"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "sirv-cli": "^3.0.0"
+  }
+}
